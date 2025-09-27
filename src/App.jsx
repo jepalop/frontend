@@ -18,13 +18,12 @@ function App() {
     const fetchData = async () => {
       try {
         const res = await axios.get("https://servidor-4f8v.onrender.com/signals");
-        // Convertimos hex → decimal
         const data = res.data.map((s) => ({
           id: s.id,
           timestamp: new Date(s.timestamp).toLocaleTimeString(),
           device_id: s.device_id,
           hex: s.data_hex,
-          value: parseInt(s.data_hex, 16), // 👈 conversión aquí
+          value: parseInt(s.data_hex, 16),
         }));
         setSignals(data);
       } catch (err) {
@@ -42,45 +41,101 @@ function App() {
   if (loading) return <p>Cargando datos...</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>📊 Brain Signals Dashboard</h1>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        margin: 0,
+        padding: 0,
+        overflow: "hidden", // 👈 evita scroll global
+      }}
+    >
+      {/* Título */}
+      <div style={{ flex: "0 0 auto", padding: "1px" }}>
+        <h1>📊 Brain Signals Dashboard</h1>
+      </div>
 
-      {/* === GRÁFICO === */}
-      <h2>Gráfico de valores</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={signals.slice(0, 20).reverse()}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
+      {/* Contenedor tabla + gráfica */}
+      <div
+        style={{
+          flex: "1 1 auto",
+          display: "flex",
+          gap: "10px",
+          padding: "10px",
+          overflow: "hidden",
+        }}
+      >
+        {/* === TABLA === */}
+        <div
+          style={{
+            flex: 3,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0, // 👈 necesario para que flex permita scroll interno
+          }}
+        >
+          <h2 style={{ marginBottom: "10px" }}>Datos en tabla</h2>
+          <div style={{ flex: 1, overflowY: "auto" }}>
+            <table
+              border="1"
+              cellPadding="5"
+              style={{ width: "100%", borderCollapse: "collapse" }}
+            >
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Timestamp</th>
+                  <th>Device</th>
+                  <th>Hex Data</th>
+                  <th>Decimal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {signals.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.id}</td>
+                    <td>{s.timestamp}</td>
+                    <td>{s.device_id}</td>
+                    <td>{s.hex}</td>
+                    <td>{s.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-      {/* === TABLA === */}
-      <h2>Datos en tabla</h2>
-      <table border="1" cellPadding="5" style={{ marginTop: "20px" }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Timestamp</th>
-            <th>Device</th>
-            <th>Hex Data</th>
-            <th>Decimal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {signals.map((s) => (
-            <tr key={s.id}>
-              <td>{s.id}</td>
-              <td>{s.timestamp}</td>
-              <td>{s.device_id}</td>
-              <td>{s.hex}</td>
-              <td>{s.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        {/* === GRÁFICO === */}
+        <div
+          style={{
+            flex: 7,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+          }}
+        >
+          <h2 style={{ marginBottom: "10px" }}>Gráfico de valores</h2>
+          <div style={{ flex: 1 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={signals.slice(0, 20).reverse()}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="timestamp" />
+                <YAxis />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#8884d8"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
