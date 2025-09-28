@@ -1,96 +1,46 @@
-/* === RESET BÁSICO === */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* === APP === */
+/* Contenedor principal */
 .app {
   width: 100vw;
   height: 100vh;
   padding: 10px;
   display: flex;
   flex-direction: column;
+  background: #f9f9f9;
   overflow: hidden;
 }
 
 h1 {
-  margin-bottom: 15px;
-  font-size: 22px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
   text-align: center;
 }
 
-.content {
-  display: flex;
-  flex: 1;
-  gap: 20px;
-  overflow: hidden;
-}
-
-/* === TABLA === */
-.table-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.table-scroll {
-  flex: 1;
-  overflow-y: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  min-width: 400px; /* 👈 evita que se rompa en pantallas pequeñas */
-}
-
-table th,
-table td {
-  border: 1px solid #ccc;
-  padding: 5px;
-  text-align: center;
-}
-
-table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-/* === GRÁFICO === */
+/* Contenedor de la gráfica */
 .chart-container {
-  flex: 2;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 0; /* importante para que ResponsiveContainer ajuste */
 }
 
-.chart-container h2 {
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-/* === RESPONSIVE (pantallas pequeñas) === */
+/* Responsive */
 @media (max-width: 768px) {
-  .content {
-    flex-direction: column; /* tabla arriba, gráfica abajo */
-  }
-
-  .table-container {
-    flex: 0 0 30%; /* tabla más compacta */
+  h1 {
+    font-size: 1.2rem;
   }
 
   .chart-container {
-    flex: 1; /* la gráfica ocupa el resto */
-  }
-
-  table {
-    font-size: 12px;
+    padding: 5px;
   }
 }
