@@ -17,19 +17,17 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
-    // listener para detectar cambio de tamaño
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
 
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://servidor-4f8v.onrender.com/signals");
+        const res = await axios.get("https://neuronatech.vercel.app/signals");
         const data = res.data.map((s) => ({
           id: s.id,
           timestamp: new Date(s.timestamp).toLocaleTimeString(),
           device_id: s.device_id,
-          hex: s.data_hex,
-          value: parseInt(s.data_hex, 16),
+          value_uv: s.value_uv, // 👈 directamente en microvoltios
         }));
         setSignals(data);
       } catch (err) {
@@ -40,7 +38,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 10000); // cada 10s
     return () => {
       clearInterval(interval);
       window.removeEventListener("resize", handleResize);
@@ -49,7 +47,6 @@ function App() {
 
   if (loading) return <p>Cargando datos...</p>;
 
-  // 🔹 en móvil solo mostramos las últimas 10 filas
   const signalsToShow = isMobile ? signals.slice(0, 10) : signals;
 
   return (
@@ -67,8 +64,7 @@ function App() {
                   <th>ID</th>
                   <th>Timestamp</th>
                   <th>Device</th>
-                  <th>Hex Data</th>
-                  <th>Decimal</th>
+                  <th>Valor (µV)</th>
                 </tr>
               </thead>
               <tbody>
@@ -77,8 +73,7 @@ function App() {
                     <td>{s.id}</td>
                     <td>{s.timestamp}</td>
                     <td>{s.device_id}</td>
-                    <td>{s.hex}</td>
-                    <td>{s.value}</td>
+                    <td>{s.value_uv?.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -88,19 +83,21 @@ function App() {
 
         {/* === GRÁFICO === */}
         <div className="chart-container">
-          <h2>Gráfico de valores</h2>
+          <h2>Gráfico de valores (µV)</h2>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={signals.slice(0, 20).reverse()}>
+            <LineChart data={signals.slice(-50)}> {/* últimas 50 muestras */}
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="timestamp" />
-              <YAxis />
+              <YAxis
+                label={{ value: "µV", angle: -90, position: "insideLeft" }}
+              />
               <Tooltip />
               <Line
                 type="monotone"
-                dataKey="value"
-                stroke="#8884d8"
+                dataKey="value_uv"
+                stroke="#00b894"
                 strokeWidth={2}
-                dot={{ r: 3 }}
+                dot={false}
               />
             </LineChart>
           </ResponsiveContainer>

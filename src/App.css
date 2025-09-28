@@ -1,9 +1,11 @@
+/* === RESET BÁSICO === */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* === APP === */
 .app {
   width: 100vw;
   height: 100vh;
@@ -15,6 +17,8 @@
 
 h1 {
   margin-bottom: 15px;
+  font-size: 22px;
+  text-align: center;
 }
 
 .content {
@@ -41,6 +45,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 400px; /* 👈 evita que se rompa en pantallas pequeñas */
 }
 
 table th,
@@ -48,6 +53,14 @@ table td {
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
+}
+
+table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 /* === GRÁFICO === */
@@ -58,6 +71,11 @@ table td {
   min-height: 0;
 }
 
+.chart-container h2 {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
 /* === RESPONSIVE (pantallas pequeñas) === */
 @media (max-width: 768px) {
   .content {
@@ -65,11 +83,11 @@ table td {
   }
 
   .table-container {
-    flex: 0 0 25%; /* tabla compacta */
+    flex: 0 0 30%; /* tabla más compacta */
   }
 
   .chart-container {
-    flex: 1; /* la gráfica ocupa la mayoría */
+    flex: 1; /* la gráfica ocupa el resto */
   }
 
   table {
