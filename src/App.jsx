@@ -22,7 +22,7 @@ function App() {
 
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://neuronatech.vercel.app/signals");
+        const res = await axios.get("https://servidor-4f8v.onrender.com/signals");
         const data = res.data.map((s) => ({
           id: s.id,
           timestamp: new Date(s.timestamp).toLocaleTimeString(),
