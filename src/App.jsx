@@ -21,8 +21,8 @@ function App() {
         const res = await axios.get("https://servidor-4f8v.onrender.com/signals");
         const data = res.data.map((s) => ({
           id: s.id,
-          timestamp: new Date(s.timestamp),
-          value: parseInt(s.data_hex, 16),
+          timestamp: new Date(s.timestamp).toLocaleTimeString(),
+          value: s.value_uv ?? parseFloat(s.value) ?? 0, // µV
         }));
         setSignals(data);
       } catch (err) {
@@ -39,34 +39,25 @@ function App() {
 
   if (loading) return <p>Cargando datos...</p>;
 
-  // 🔹 filtrar últimos 10 segundos
-  const latest = signals.length > 0 ? signals[0].timestamp : null;
-  let signalsToShow = signals;
-  if (latest) {
-    const cutoff = new Date(latest.getTime() - 10 * 1000);
-    signalsToShow = signals.filter((s) => s.timestamp >= cutoff);
-  }
-
-  // 🔹 convertir timestamp a string legible
-  const chartData = signalsToShow.map((s) => ({
-    ...s,
-    timestamp: s.timestamp.toLocaleTimeString(),
-  }));
+  // Últimos ~100 registros ≈ 10 segundos (ajusta según frecuencia real)
+  const signalsToShow = signals.slice(0, 100).reverse();
 
   return (
     <div className="app">
-      <h1>📊 Brain Signals (últimos 10s)</h1>
+      <h1>📊 Brain Signals</h1>
       <div className="chart-container">
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={chartData}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={signalsToShow}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
-            <YAxis />
+            <YAxis
+              label={{ value: "µV", angle: -90, position: "insideLeft" }}
+            />
             <Tooltip />
             <Line
               type="monotone"
               dataKey="value"
-              stroke="#8884d8"
+              stroke="#00b894"
               strokeWidth={2}
               dot={false}
             />
