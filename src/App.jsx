@@ -8,7 +8,6 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 import "./App.css";
 
@@ -19,22 +18,18 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [rawRes, procRes] = await Promise.all([
-          axios.get("https://servidor-4f8v.onrender.com/signals?limit=2500"),
-          axios.get("https://servidor-4f8v.onrender.com/signals/processed?limit=2500"),
-        ]);
+        const res = await axios.get(
+          "https://servidor-4f8v.onrender.com/signals/processed?limit=2500"
+        );
 
-        const raw = rawRes.data.reverse();
-        const proc = procRes.data.reverse();
+        const processed = res.data.reverse();
 
-        // 🔹 Alinear las señales por índice (asumiendo misma longitud)
-        const combined = raw.map((r, i) => ({
-          timestamp: new Date(r.timestamp).toLocaleTimeString(),
-          raw: r.value_uv,
-          filtered: proc[i] ? proc[i].value_uv : null,
+        const formatted = processed.map((p) => ({
+          timestamp: new Date(p.timestamp).toLocaleTimeString(),
+          value: p.value_uv,
         }));
 
-        setData(combined);
+        setData(formatted);
       } catch (err) {
         console.error("❌ Error al cargar datos:", err);
       } finally {
@@ -43,7 +38,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(fetchData, 10000); // refresco cada 10s
     return () => clearInterval(interval);
   }, []);
 
@@ -51,26 +46,19 @@ function App() {
 
   return (
     <div className="app">
-      <h1>📊 Señales Raw vs Filtradas</h1>
+      <h1>📊 Señal Filtrada</h1>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
-            <YAxis label={{ value: "µV", angle: -90, position: "insideLeft" }} />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="raw"
-              stroke="#d63031"
-              strokeWidth={1}
-              dot={false}
-              name="Raw"
+            <YAxis
+              label={{ value: "µV", angle: -90, position: "insideLeft" }}
             />
+            <Tooltip />
             <Line
               type="monotone"
-              dataKey="filtered"
+              dataKey="value"
               stroke="#0984e3"
               strokeWidth={2}
               dot={false}
