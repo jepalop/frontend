@@ -16,18 +16,6 @@
   overflow-y: auto;
 }
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  text-align: center;
-  color: #2d3436;
-}
-
-h2 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-  color: #2d3436;
-}
 
 /* Contenedor de cada gráfica */
 .chart-container {
@@ -38,4 +26,175 @@ h2 {
   padding: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: block;
+}
+
+/* === Separación consistente entre las gráficas EEG y PSD === */
+.chart-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; /* 🔧 ajusta aquí la distancia vertical */
+}
+
+.chart-box {
+  width: 100%;
+}
+
+/* === Espacio reservado entre gráficas === */
+.chart-box:first-child {
+  margin-bottom: 60px; /* 🔧 espacio fijo entre EEG y PSD */
+}
+
+
+/* ===== MODO SELECTOR ===== */
+.mode-selector.top-left {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 25px; /* Aumentamos el espacio entre botones */
+  align-items: center;
+  z-index: 100;
+}
+
+/* Añadimos una pequeña separación extra y suavidad */
+.mode-selector button:first-child {
+  margin-right: 15px; /* separación adicional */
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.mode-selector button {
+  background-color: #fff;
+  border: 2px solid #c0c0c0; /* borde plateado */
+  border-radius: 8px;
+  padding: 10px 25px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.mode-selector button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.mode-selector button:hover {
+  background-color: #dfe6e9;
+  transform: scale(1.05);
+}
+
+.mode-selector button.active {
+  border-color: #00b894;
+  background-color: #00b894;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
+}
+
+.scroll-container {
+  width: 95%;
+  margin: 0 auto; /* 🔧 sin márgenes verticales */
+  text-align: center;
+}
+
+
+.scroll-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: linear-gradient(90deg, #6c5ce7, #00b894);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.scroll-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #6c5ce7;
+  cursor: pointer;
+}
+
+.scroll-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Botones Zoom */
+.zoom-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.zoom-btn {
+  border: none;
+  background-color: #6c5ce7;
+  color: white;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.zoom-btn:hover {
+  background-color: #4b37d3;
+  transform: scale(1.05);
+}
+
+/* Selector de tiempo */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 7px auto;
+  text-align: center;
+}
+
+/* Mantener espacio vertical aunque no haya controles (en Live Mode) */
+.controls-placeholder {
+  height: 60px; /* mismo alto aproximado que los botones de tiempo */
+}
+
+
+.time-button {
+  background-color: white;
+  color: #00b894;
+  border: 2px solid #00b894;
+  border-radius: 8px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  min-width: 65px;
+}
+
+.time-button:hover {
+  background-color: #00b894;
+  color: white;
+  transform: scale(1.05);
+  
+}
+
+.time-button.active {
+  background-color: #00b894;
+  color: white;
+  box-shadow: 0 0 6px rgba(0, 184, 148, 0.5);
+  transform: scale(1.08);
+  outline: none;
+  box-shadow: none;
 }
