@@ -8,39 +8,34 @@
 /* Contenedor principal */
 .app {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   padding: 10px;
   display: flex;
   flex-direction: column;
   background: #f9f9f9;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 h1 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
   text-align: center;
+  color: #2d3436;
 }
 
-/* Contenedor de la gráfica */
+h2 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #2d3436;
+}
+
+/* Contenedor de cada gráfica */
 .chart-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
   background: white;
   border-radius: 8px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  min-height: 0; /* importante para que ResponsiveContainer ajuste */
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 1.2rem;
-  }
-
-  .chart-container {
-    padding: 5px;
-  }
+  display: block;
 }
